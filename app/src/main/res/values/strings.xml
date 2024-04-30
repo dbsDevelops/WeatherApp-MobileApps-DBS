@@ -4,4 +4,6 @@
     <string name="get_location">Get Location</string>
     <string name="search_city">Search City</string>
     <string name="favourite_cities">Favourite Cities</string>
+    <string name="available_cities">Available Cities</string>
+    <string name="gps_location_message">Latitude: %1$s, Longitude: $2$s</string>
 </resources>

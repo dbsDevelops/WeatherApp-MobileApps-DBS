@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.activities
 
 import android.Manifest
 import android.animation.ObjectAnimator
@@ -13,12 +13,22 @@ import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.weatherapp.R
+import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.weather.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 class MainActivity : ComponentActivity() {
     // Initialise view model
+    //TODO: Implement the DataModel instead of the ViewModel
     private val viewModel by viewModels<MainViewModel>()
+
+    // Bind view to current activity
+    private val view: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 101
@@ -55,14 +65,30 @@ class MainActivity : ComponentActivity() {
                 zoomY.start()
             }
         }
-        setContentView(R.layout.activity_main)
+        setContentView(view.root)
 
-        // Set up main activity logic
+        // Set up logic for fetching current location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
         findViewById<Button>(R.id.btnGetLocation).setOnClickListener {
             fetchLocation()
         }
+
+        // Set up logic for going to favourite cities activity
+        val btnFavouriteCities = view.btnFavouriteCities
+        btnFavouriteCities.setOnClickListener {
+            val intent = android.content.Intent(this,
+                FavouriteCitiesActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Set up logic for going to available cities activity
+        val btnAvailableCities = view.btnAvailableCities
+        btnAvailableCities.setOnClickListener {
+            val intent = android.content.Intent(this,
+                AvailableCitiesActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun fetchLocation() {
@@ -73,7 +99,8 @@ class MainActivity : ComponentActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                                                    LOCATION_PERMISSION_REQUEST_CODE)
+                                                    LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
 
