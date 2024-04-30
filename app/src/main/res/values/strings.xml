@@ -2,4 +2,6 @@
     <string name="app_name">WeatherApp</string>
     <string name="curent_location">Curent Location</string>
     <string name="get_location">Get Location</string>
+    <string name="search_city">Search City</string>
+    <string name="favourite_cities">Favourite Cities</string>
 </resources>
